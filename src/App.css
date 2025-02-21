@@ -1,0 +1,34 @@
+/* 🎾 General Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+
+body {
+  background-color: #fff;
+}
+/* 🔹 Modern Header */
+
+.main-content{
+  margin-top:100px;
+  margin-bottom:50px;
+  
+}
+
+
+
+/* 🔹 Modern Footer */
+.footer-modern {
+  background: #0E395F;
+  color: white;
+  text-align: center;
+  padding: 15px;
+  height:100px;
+  width: 100%;
+  bottom: 0;
+}
+
+

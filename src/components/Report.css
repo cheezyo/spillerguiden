@@ -1,0 +1,95 @@
+.report-img {
+  max-width: 500px;
+  max-height: 300px;
+  width: auto;   /* ✅ Maintain aspect ratio */
+  height: auto;  /* ✅ Maintain aspect ratio */
+ 
+  object-fit: contain; /* ✅ Ensures the full image is visible */
+}
+
+/* 🎾 Coach Report Styling */
+.coach-report {
+  max-width: 100%;
+}
+
+/* ✅ Section Titles */
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+/* 👤 Player Info */
+.player-info {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+/* 🏆 Task Card */
+.task-card {
+  background: #fefefe;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 5px solid #007bff;
+}
+
+/* 🎯 Task Title */
+.task-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* 🖼️ Task Image */
+.task-img {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+/* 🩺 Diagnosis & Measures */
+.diagnosis-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+/* ✅ Two-Column Layout for Diagnosis & Measures */
+.diagnosis-section {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+
+.diagnosis-col,
+.measure-col {
+  padding: 10px;
+}
+
+.diagnosis-title,
+.measure-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.diagnosis-text,
+.measure-text {
+  font-size: 1rem;
+}
+
+/* 📸 Diagnosis Image */
+.diagnosis-img,
+.measure-img {
+  max-width: 100%;
+  max-height: 250px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+/* 🖨️ Print Button */
+.print-btn {
+  font-size: 1.2rem;
+  padding: 10px 20px;
+}

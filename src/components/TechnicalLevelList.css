@@ -1,0 +1,43 @@
+.tech-levels-container {
+  padding: 20px;
+}
+
+.tech-card {
+  border: none;
+  overflow: hidden;
+  transition: transform 0.2s ease-in-out;
+}
+
+.tech-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.tech-card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.tech-image-container {
+  width: 100%;
+  height: 220px; /* Adjust height as needed */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* ✅ Align image to the top */
+  overflow: hidden;
+  background-color: #f8f9fa; /* Light background to prevent gaps */
+}
+
+.tech-image {
+  width: 100%;
+  
+  height: auto;
+  object-fit: cover; /* ✅ Ensures image maintains aspect ratio */
+  object-position: top center; /* ✅ Keeps the top visible and centers horizontally */
+}
+
+.tech-card-body {
+  background-color: #f8f9fa;
+  text-align: center;
+  padding: 15px;
+}

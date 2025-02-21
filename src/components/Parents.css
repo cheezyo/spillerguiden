@@ -1,0 +1,48 @@
+.parents-container {
+  max-width: 800px;
+  margin: auto;
+  padding-top: 20px;
+}
+
+.parent-card {
+  padding: 30px;
+  border-radius: 10px;
+  background-color: #fff;
+}
+
+.report-title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.info-section h5 {
+  font-size: 18px;
+}
+
+.info-highlight {
+  font-weight: bold;
+  color: #d2232a;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #005BAA;
+  border-bottom: 2px solid #005BAA;
+  padding-bottom: 5px;
+}
+
+.training-list, .tournament-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.training-list li, .tournament-list li {
+  font-size: 16px;
+  padding: 8px 0;
+}
+
+button {
+  font-size: 16px;
+  padding: 10px 20px;
+}

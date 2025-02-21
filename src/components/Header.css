@@ -1,0 +1,47 @@
+.main-header {
+  height: 100px; /* Set header height */
+  background-color: #d2232a; /* Background color */
+  color: #fff; /* Font color */
+  display: flex;
+  align-items: center; /* Center items vertically */
+  padding: 0 20px; /* Add some horizontal padding */
+  justify-content: space-between; /* Space between logo and menu */
+  position: fixed; /* ✅ Fix the navbar at the top */
+  top: 0; /* ✅ Stay at the top */
+  left: 0;
+  width: 100%; /* ✅ Full width */
+  z-index: 1000; /* ✅ Ensure it's above other elements */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* ✅ Optional shadow */
+}
+
+
+/* ✅ Logo Styling */
+.logo {
+  height: 80px; /* ✅ Fixed height */
+}
+
+/* ✅ Ensure Navbar spans full width */
+.navbar-modern {
+  width: 100%;
+  
+}
+
+/* ✅ Ensure the Offcanvas Menu floats right */
+.offcanvas {
+  width: 250px !important; /* ✅ Adjust width of menu */
+}
+
+.custom-hamburger {
+  border:none;
+}
+
+/* ✅ Make the bars (☰) inside the hamburger white */
+.custom-hamburger .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 0.8)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E") !important;
+}
+
+.brand-text{
+  font-weight:700;
+  margin-left:10px;
+  font-size:1.7rem;
+}
