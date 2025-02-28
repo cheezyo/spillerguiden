@@ -110,13 +110,13 @@
   background: white;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* 🔹 Table Header */
 .custom-table thead {
   background: linear-gradient(135deg,  #218838, #005BAA);
-  color: white;
+  color:#fff;
   font-weight: bold;
 }
 
@@ -137,13 +137,17 @@
 
 /* 🎨 Alternating Row Colors */
 .custom-table tbody tr:nth-child(even) {
-  background: #f8f8f8;
+  background: #e8e8e8; /* Light gray for even rows */
 }
 
-/* ✨ Hover Effect */
+.custom-table tbody tr:nth-child(odd) {
+  background: #ffffff; /* White for odd rows */
+}
+
+/* ✨ Unified Hover Effect (Same for Odd & Even Rows) */
 .custom-table tbody tr:hover {
-  background: #e2f7e2;
-  transition: 0.3s;
+  background: #e2f7e2 !important; /* Light green hover */
+  transition: background 0.3s ease-in-out;
 }
 
 /* ✅ Responsive Table */
@@ -216,4 +220,17 @@
 
 .row-margin-top{
   margin-top:30px;
+}
+
+.drill-card-content {
+  height: 200px; /* ✅ Ensures all cards have the same height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center; /* ✅ Centers text */
+}
+
+.drill-card-img {
+  max-height: 200px;
+  object-fit: cover; /* ✅ Ensures images fit nicely */
 }

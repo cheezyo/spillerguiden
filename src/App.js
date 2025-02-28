@@ -10,9 +10,13 @@ import LevelDetails from "./components/LevelDetails";
 import TechnicalLevelDetails from "./components/TechnicalLevelDetails";
 import TechnicalLevelList from "./components/TechnicalLevelList";
 import LandingPage from "./components/LandingPage";
+import TaskDetails from "./components/TaskDetails";
 import CoachReportForm from "./components/CoachReportForm";
 import CoachReportDetails from "./components/CoachReportDetails";
 import Parents from "./components/Parents";
+import TrainingPlan from "./components/TrainingPlan";
+import SessionPlan from "./components/SessionPlan";
+import SituationTypeDetails from "./components/SituationTypeDetails";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -52,6 +56,13 @@ const AppLayout = () => {
                 element={<CoachReportDetails />}
               />
               <Route path="/parents" element={<Parents />} />
+              <Route path="/task/:taskId" element={<TaskDetails />} />
+              <Route path="/training-plan" element={<TrainingPlan />} />
+              <Route path="/session-plan" element={<SessionPlan />} />
+              <Route
+                path="/situation-type/:situationType"
+                element={<SituationTypeDetails />}
+              />
             </Routes>
           </Col>
         </Row>

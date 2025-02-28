@@ -1,18 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getLevels, getTasks } from "../services/api";
+import {
+  getLevels,
+  getTacticalTasks,
+  getPhysicalTasks,
+  getMentalTasks,
+  getDrillCountsBySituationType,
+} from "../services/api";
 import { Accordion, Modal, Button } from "react-bootstrap"; // Import Bootstrap components
+import "./LevelsList.css";
 import PieChartComponent from "./PieChartComponent";
 
 const LevelDetails = () => {
   const { id } = useParams();
   const [level, setLevel] = useState(null);
-  const [tasks, setTasks] = useState({
-    Taktisk: [],
-    Mentalt: [],
-    Fysisk: [],
-  });
-  // State for modal
+  const [tacticalTasks, setTacticalTasks] = useState([]);
+  const [mentalTasks, setMentalTasks] = useState([]);
+  const [physicalTasks, setPhysicalTasks] = useState([]);
+  const [drillCounts, setDrillCounts] = useState({});
+
+  // State for modal pop-ups
   const [showModal, setShowModal] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState("");
   const [showImageModal, setShowImageModal] = useState(false);
@@ -21,31 +28,45 @@ const LevelDetails = () => {
   const [showTextModal, setShowTextModal] = useState(false);
   const [fullText, setFullText] = useState("");
 
+  // ✅ Fetch tasks separately for each category
+  const fetchTasksByType = async (levelId) => {
+    try {
+      const [tacticalTasks, mentalTasks, physicalTasks] = await Promise.all([
+        getTacticalTasks(levelId),
+        getMentalTasks(levelId),
+        getPhysicalTasks(levelId),
+      ]);
+
+      setTacticalTasks(tacticalTasks);
+      setMentalTasks(mentalTasks);
+      setPhysicalTasks(physicalTasks);
+
+      // ✅ Fetch drill counts separately now that API returns correct format
+      await fetchDrillCounts();
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+    }
+  };
+
+  const fetchDrillCounts = async () => {
+    try {
+      const drillCountsData = await getDrillCountsBySituationType();
+      setDrillCounts(drillCountsData); // ✅ Store API response directly
+    } catch (error) {
+      console.error("Error fetching drill counts:", error);
+    }
+  };
+
   useEffect(() => {
     async function fetchData() {
       const levelsData = await getLevels();
       const foundLevel = levelsData.find((l) => l.id.toString() === id);
       setLevel(foundLevel);
 
-      const tasksData = await getTasks();
-      const filteredTasks = tasksData.filter(
-        (task) => task.level === parseInt(id),
-      );
+      await fetchTasksByType(id);
 
-      const categorizedTasks = {
-        Taktisk: {},
-        Mentalt: {},
-        Fysisk: {},
-      };
-
-      filteredTasks.forEach((task) => {
-        if (!categorizedTasks[task.category][task.situation_type.name]) {
-          categorizedTasks[task.category][task.situation_type.name] = [];
-        }
-        categorizedTasks[task.category][task.situation_type.name].push(task);
-      });
-
-      setTasks(categorizedTasks);
+      const drillCountsData = await getDrillCountsBySituationType(id);
+      setDrillCounts(drillCountsData);
     }
     fetchData();
   }, [id]);
@@ -163,88 +184,150 @@ const LevelDetails = () => {
               </p>
             </li>
           </ul>
-          {/* ✅ Task Categories Accordion */}
+          {/* ✅ Tasks Accordion Sections */}
           <Accordion>
-            {Object.entries(tasks).map(([category, situationTypes], index) => (
-              <Accordion.Item eventKey={index.toString()} key={category}>
-                <Accordion.Header>{category}</Accordion.Header>
-                <Accordion.Body>
-                  {Object.entries(situationTypes).length === 0 ? (
-                    <p>Ingen {category.toLowerCase()} oppgaver tilgjengelig.</p>
-                  ) : (
-                    Object.entries(situationTypes).map(
-                      ([situationType, taskList]) => (
-                        <div key={situationType} className="table-container">
-                          <table className="custom-table">
-                            <thead>
-                              <tr>
-                                <th colSpan="3">
-                                  <h5 className="table-title">
-                                    {situationType
-                                      ? situationType
-                                      : "No Name Found"}
-                                  </h5>
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {taskList.map((task) => (
-                                <tr key={task.id}>
-                                  <td>
-                                    {task.description.length > 200
-                                      ? `${task.description.substring(0, 200)}... `
-                                      : task.description}
-                                    {task.description.length > 200 && (
-                                      <Button
-                                        variant="link"
-                                        className="btn-sm"
-                                        onClick={() =>
-                                          handleShowTextModal(task.description)
-                                        }
-                                      >
-                                        Les mer
-                                      </Button>
-                                    )}
-                                  </td>
-                                  <td>
-                                    {task.video_url && (
-                                      <Button
-                                        variant="primary"
-                                        className="me-2 btn-sm"
-                                        onClick={() =>
-                                          handleShowModal(task.video_url)
-                                        }
-                                      >
-                                        Se video
-                                      </Button>
-                                    )}
-                                  </td>
-                                  <td>
-                                    {task.picture_url && (
-                                      <img
-                                        src={task.picture_url}
-                                        alt="Thumbnail"
-                                        className="task-thumbnail"
-                                        onClick={() =>
-                                          handleShowImageModal(
-                                            task.picture_url,
-                                            task.picture_desc,
-                                          )
-                                        }
-                                      />
-                                    )}
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      ),
-                    )
-                  )}
-                </Accordion.Body>
-              </Accordion.Item>
-            ))}
+            {/* Tactical Tasks */}
+            <Accordion.Item eventKey="0">
+              <Accordion.Header>Taktisk</Accordion.Header>
+              <Accordion.Body>
+                {tacticalTasks.length === 0 ? (
+                  <p>Ingen taktiske oppgaver tilgjengelig.</p>
+                ) : (
+                  Object.entries(
+                    tacticalTasks.reduce((groups, task) => {
+                      const situationType =
+                        task.situation_type?.name || "Ukjent";
+                      if (!groups[situationType]) groups[situationType] = [];
+                      groups[situationType].push(task);
+                      return groups;
+                    }, {}),
+                  ).map(([situationType, tasks]) => (
+                    <div key={situationType} className="table-container">
+                      <h4 className="table-title">
+                        {situationType}{" "}
+                        {drillCounts[situationType] > 0 ? (
+                          <Link
+                            to={`/situation-type/${encodeURIComponent(situationType)}?level=${id}`}
+                          >
+                            ({drillCounts[situationType]} øvelser) →
+                          </Link>
+                        ) : (
+                          <span className="drill-count-text">
+                            ({drillCounts[situationType]} 0 øvelser)
+                          </span>
+                        )}
+                      </h4>
+
+                      <table className="custom-table">
+                        <tbody>
+                          {tasks.map((task, index) => (
+                            <tr
+                              key={task.id}
+                              className={
+                                index % 2 === 0 ? "even-row" : "odd-row"
+                              }
+                            >
+                              <td>{index + 1}</td>
+                              <td>{task.description}</td>
+                              <td>
+                                {task.video_url && (
+                                  <Button
+                                    variant="primary"
+                                    className="btn-sm"
+                                    onClick={() =>
+                                      handleShowModal(task.video_url)
+                                    }
+                                  >
+                                    Se video
+                                  </Button>
+                                )}
+                              </td>
+                              <td>
+                                {task.picture_url && (
+                                  <img
+                                    src={task.picture_url}
+                                    alt="Thumbnail"
+                                    className="task-thumbnail"
+                                    onClick={() =>
+                                      handleShowImageModal(
+                                        task.picture_url,
+                                        task.picture_desc,
+                                      )
+                                    }
+                                  />
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ))
+                )}
+              </Accordion.Body>
+            </Accordion.Item>
+
+            {/* Mental Tasks */}
+            <Accordion.Item eventKey="1">
+              <Accordion.Header>Mentalt</Accordion.Header>
+              <Accordion.Body>
+                {mentalTasks.length === 0 ? (
+                  <p>Ingen mentale oppgaver tilgjengelig.</p>
+                ) : (
+                  <table className="custom-table">
+                    <tbody>
+                      {mentalTasks.map((task) => (
+                        <tr key={task.id}>
+                          <td>{task.description}</td>
+                          <td>
+                            {task.video_url && (
+                              <Button
+                                variant="primary"
+                                className="btn-sm"
+                                onClick={() => handleShowModal(task.video_url)}
+                              >
+                                Se video
+                              </Button>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              </Accordion.Body>
+            </Accordion.Item>
+
+            {/* Physical Tasks */}
+            <Accordion.Item eventKey="2">
+              <Accordion.Header>Fysisk</Accordion.Header>
+              <Accordion.Body>
+                {physicalTasks.length === 0 ? (
+                  <p>Ingen fysiske oppgaver tilgjengelig.</p>
+                ) : (
+                  <table className="custom-table">
+                    <tbody>
+                      {physicalTasks.map((task) => (
+                        <tr key={task.id}>
+                          <td>{task.description}</td>
+                          <td>
+                            {task.video_url && (
+                              <Button
+                                variant="primary"
+                                className="btn-sm"
+                                onClick={() => handleShowModal(task.video_url)}
+                              >
+                                Se video
+                              </Button>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              </Accordion.Body>
+            </Accordion.Item>
           </Accordion>
         </div>
       </div>
@@ -300,8 +383,8 @@ const LevelDetails = () => {
       </Modal>
       <hr />
       <p>
-        <Link to="/" class="btn btn-primary">
-          Tilbake til nivåside
+        <Link to="/levels" class="btn btn-secondary">
+          ← Tilbake til nivåside
         </Link>
       </p>
     </div>
